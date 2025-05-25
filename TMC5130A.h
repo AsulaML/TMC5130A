@@ -114,19 +114,19 @@ extern "C" {
 
 
 uint8_t TMC5130A_Read_Write_Reg(uint8_t WichStepper, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData);
-void Stepper_Init(uint8_t WichStepper, uint8_t mode);
-void Stepper_Config_RampMode_Only(uint8_t WichStepper, uint8_t mode);
-void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, uint8_t  ihold, uint8_t mode);
-void Stepper_Config_RAMP(uint8_t WichStepper, uint32_t Vtarget, uint32_t Vstart, uint32_t Vstop, uint32_t V1, uint32_t Amax, uint32_t A1, uint32_t Dmax, uint32_t D1);
-void Stepper_Config_uStep_Pos_Direction(uint8_t WichStepper, int32_t microstep_number, uint8_t rot_dir, int32_t offset);
-void EarlyRampTermination_InPosMode(uint8_t WichStepper);
-bool Is_Motor_Stopped(uint8_t WichStepper);
-bool Is_Motor_Velocity_Zero(uint8_t WichStepper);
-bool Is_Motor_Position_Reached(uint8_t WichStepper);
-uint32_t Read_RAMP_STAT(uint8_t WichStepper);
-int32_t Read_XACTUAL(uint8_t WichStepper);
-uint32_t Clear_XACTUAL(uint8_t WichStepper);
-void Stepper_Config_XTARGET_Only(uint8_t WichStepper, int pos_microstep_number);
+void TMC5130A_Init(uint8_t WichStepper, uint8_t mode);
+void TMC5130A_Config_Ramp_Mode(uint8_t WichStepper, uint8_t mode);
+void TMC5130A_Config_Courants(uint8_t WichStepper, uint8_t  irun, uint8_t  ihold, uint8_t mode);
+void TMC5130A_Config_Ramp(uint8_t WichStepper, uint32_t Vtarget, uint32_t Vstart, uint32_t Vstop, uint32_t V1, uint32_t Amax, uint32_t A1, uint32_t Dmax, uint32_t D1);
+void TMC5130A_Config_uStep_Pos_Direction(uint8_t WichStepper, int32_t microstep_number, uint8_t rot_dir, int32_t offset);
+void TMC5130A_EarlyRampTermination_InPosMode(uint8_t WichStepper);
+bool TMC5130A_Is_Motor_Stopped(uint8_t WichStepper);
+bool TMC5130A_Is_Motor_Velocity_Zero(uint8_t WichStepper);
+bool TMC5130A_Is_Motor_Position_Reached(uint8_t WichStepper);
+uint32_t TMC5130A_Read_RAMP_STAT(uint8_t WichStepper);
+int32_t TMC5130A_Read_X_ACTUAL(uint8_t WichStepper);
+uint32_t TMC5130A_Clear_X_ACTUAL(uint8_t WichStepper);
+void TMC5130A_Config_X_TARGET_Only(uint8_t WichStepper, int pos_microstep_number);
 
     
 #ifdef	__cplusplus

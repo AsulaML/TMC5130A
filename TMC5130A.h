@@ -77,37 +77,37 @@ extern "C" {
 
     // TRINAMIC TMC5130 Register Address Defines
 
-    #define TMC5130A_REG_ADDR_GCONF				    0x00 	// Global configuration flags
-    #define TMC5130A_REG_ADDR_GSTAT                 0x01    // Global status flag
+    #define TMC5130A_REG_ADDR_GCONF                 0x00 	// Global configuration flags
+    #define TMC5130A_REG_ADDR_GSTA                  0x01    // Global status flag
     #define TMC5130A_REG_ADDR_IOIN                  0x04
-    #define TMC5130A_REG_ADDR_X_COMPARE 			0x05	// Position  comparison  register
-    #define TMC5130A_REG_ADDR_IHOLD_IRUN			0x10	// Driver current control
+    #define TMC5130A_REG_ADDR_X_COMPARE             0x05	// Position  comparison  register
+    #define TMC5130A_REG_ADDR_IHOLD_IRUN            0x10	// Driver current control
     #define TMC5130A_REG_ADDR_TPOWER_DOWN           0x11 
     #define TMC5130A_REG_ADDR_TPWMTHRS              0x13
     #define TMC5130A_REG_ADDR_TCOOLTHRS             0x14
     #define TMC5130A_REG_ADDR_THIGH                 0x15
-    #define TMC5130A_REG_ADDR_RAMPMODE			    0x20	// Driving mode (Velocity, Positioning, Hold)
-    #define TMC5130A_REG_ADDR_X_ACTUAL				0x21	// Actual motor position
-    #define TMC5130A_REG_ADDR_VACTUAL 			    0x22	// Actual  motor  velocity  from  ramp  generator
-    #define TMC5130A_REG_ADDR_VSTART				0x23	// Motor start velocity
-    #define TMC5130A_REG_ADDR_A_1					0x24	// First  acceleration  between  VSTART  and  V1
-    #define TMC5130A_REG_ADDR_V_1					0x25	// First  acceleration  /  deceleration  phase  target velocity
-    #define TMC5130A_REG_ADDR_A_MAX				    0x26	// Second  acceleration  between  V1  and  VMAX
-    #define TMC5130A_REG_ADDR_V_MAX 				0x27	// This is the target velocity in velocity mode. It can be changed any time during a motion.
-    #define TMC5130A_REG_ADDR_D_MAX				    0x28	// Deceleration between VMAX and V1
-    #define TMC5130A_REG_ADDR_D_1					0x2A 	// Deceleration  between  V1  and  VSTOP
-    #define TMC5130A_REG_ADDR_V_STOP				0x2B	// Motor stop velocity (unsigned)
-    #define TMC5130A_REG_ADDR_TZEROWAIT			    0x2C	// Defines  the  waiting  time  after  ramping  down
+    #define TMC5130A_REG_ADDR_RAMPMODE              0x20	// Driving mode (Velocity, Positioning, Hold)
+    #define TMC5130A_REG_ADDR_X_ACTUAL              0x21	// Actual motor position
+    #define TMC5130A_REG_ADDR_VACTUAL               0x22	// Actual  motor  velocity  from  ramp  generator
+    #define TMC5130A_REG_ADDR_VSTART                0x23	// Motor start velocity
+    #define TMC5130A_REG_ADDR_A_1                   0x24	// First  acceleration  between  VSTART  and  V1
+    #define TMC5130A_REG_ADDR_V_1                   0x25	// First  acceleration  /  deceleration  phase  target velocity
+    #define TMC5130A_REG_ADDR_A_MAX                 0x26	// Second  acceleration  between  V1  and  VMAX
+    #define TMC5130A_REG_ADDR_V_MAX                 0x27	// This is the target velocity in velocity mode. It can be changed any time during a motion.
+    #define TMC5130A_REG_ADDR_D_MAX                 0x28	// Deceleration between VMAX and V1
+    #define TMC5130A_REG_ADDR_D_1                   0x2A 	// Deceleration  between  V1  and  VSTOP
+    #define TMC5130A_REG_ADDR_V_STOP                0x2B	// Motor stop velocity (unsigned)
+    #define TMC5130A_REG_ADDR_TZEROWAIT             0x2C	// Defines  the  waiting  time  after  ramping  down
 
-    #define TMC5130A_REG_ADDR_X_TARGET				0x2D	//Target position for ramp mode
-    #define TMC5130A_REG_ADDR_V_DC_MIN              0x33
-    #define TMC5130A_REG_ADDR_SW_MODE 			    0x34	//Switch mode configuration
-    #define TMC5130A_REG_ADDR_RAMP_STAT			    0x35	//Ramp status and switch event status
-    #define TMC5130A_REG_ADDR_X_LATCH				0x36	//Latches  XACTUAL  upon  a programmable switch event
-    #define TMC5130A_REG_ADDR_CHOPCONF			    0x6C	//Chopper and driver configuration
-    #define TMC5130A_REG_ADDR_COOLCONF			    0x6D	//coolStep smart current control register and stallGuard2 configuration
+    #define TMC5130A_REG_ADDR_X_TARGET              0x2D	//Target position for ramp mode
+    #define TMC5130A_REG_ADDR_V_DC_MIN              0x33	//Minimum velocity for deceleration 
+    #define TMC5130A_REG_ADDR_SW_MODE               0x34	//Switch mode configuration
+    #define TMC5130A_REG_ADDR_RAMP_STAT             0x35	//Ramp status and switch event status
+    #define TMC5130A_REG_ADDR_X_LATCH               0x36	//Latches  XACTUAL  upon  a programmable switch event
+    #define TMC5130A_REG_ADDR_CHOPCONF              0x6C	//Chopper and driver configuration
+    #define TMC5130A_REG_ADDR_COOLCONF              0x6D	//coolStep smart current control register and stallGuard2 configuration
     #define TMC5130A_REG_ADDR_DC_CTRL               0x6E
-    #define TMC5130A_REG_ADDR_DRV_STATUS 			0x6F	//stallGuard2 value and driver error flags
+    #define TMC5130A_REG_ADDR_DRV_STATUS            0x6F	//stallGuard2 value and driver error flags
     #define TMC5130A_REG_ADDR_PWM_CONF              0x70
     #define TMC5130A_REG_ADDR_LOST_STEPS            0x73
 

@@ -17,7 +17,7 @@ int32_t VSTART_MEMO = 0;
 // WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
 // return the status value
 // RW 1 for write and 0 for read
-uint8_t WriteReg(uint8_t WichStepper, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData)
+uint8_t TMC5130A_Read_Write_Reg(uint8_t WichStepper, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData)
 {
     uint8_t first_byte = 0;
     uint8_t status_reg = 0;
@@ -175,15 +175,15 @@ void Stepper_Init(uint8_t WichStepper, uint8_t mode)
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 }
@@ -209,15 +209,15 @@ void Stepper_Config_RampMode_Only(uint8_t WichStepper, uint8_t mode)
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 }
@@ -245,15 +245,15 @@ void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, 
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_GCONF, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_GCONF, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_GCONF, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_GCONF, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_GCONF, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_GCONF, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
     
@@ -269,15 +269,15 @@ void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, 
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_IHOLD_IRUN, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_IHOLD_IRUN, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_IHOLD_IRUN, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_IHOLD_IRUN, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_IHOLD_IRUN, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_IHOLD_IRUN, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -294,15 +294,15 @@ void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, 
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -318,15 +318,15 @@ void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, 
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_CHOPCONF, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_CHOPCONF, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_CHOPCONF, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_CHOPCONF, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_CHOPCONF, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_CHOPCONF, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -342,15 +342,15 @@ void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, 
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_PWM_CONF, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_PWM_CONF, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_PWM_CONF, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_PWM_CONF, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_PWM_CONF, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_PWM_CONF, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -364,15 +364,15 @@ void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, 
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_TPWMTHRS, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_TPWMTHRS, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_TPWMTHRS, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_TPWMTHRS, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_TPWMTHRS, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_TPWMTHRS, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
     
@@ -388,15 +388,15 @@ void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, 
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_V_DC_MIN, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_V_DC_MIN, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_V_DC_MIN, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_V_DC_MIN, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_V_DC_MIN, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_V_DC_MIN, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
     
@@ -412,15 +412,15 @@ void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, 
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_DC_CTRL, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_DC_CTRL, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_DC_CTRL, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_DC_CTRL, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_DC_CTRL, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_DC_CTRL, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
     
@@ -437,15 +437,15 @@ void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, 
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		    status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_COOLCONF, &DataToWrite[0], &DataReaded[0]);
+    		    status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_COOLCONF, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		    status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_COOLCONF, &DataToWrite[0], &DataReaded[0]);
+    		    status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_COOLCONF, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		    status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_COOLCONF, &DataToWrite[0], &DataReaded[0]);
+    		    status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_COOLCONF, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
     
@@ -459,15 +459,15 @@ void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, 
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		    status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_TCOOLTHRS, &DataToWrite[0], &DataReaded[0]);
+    		    status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_TCOOLTHRS, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		    status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_TCOOLTHRS, &DataToWrite[0], &DataReaded[0]);
+    		    status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_TCOOLTHRS, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		    status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_TCOOLTHRS, &DataToWrite[0], &DataReaded[0]);
+    		    status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_TCOOLTHRS, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 }
@@ -498,15 +498,15 @@ void Stepper_Config_RAMP(uint8_t WichStepper, uint32_t Vtarget, uint32_t Vstart,
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -521,15 +521,15 @@ void Stepper_Config_RAMP(uint8_t WichStepper, uint32_t Vtarget, uint32_t Vstart,
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_V_STOP, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_V_STOP, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_V_STOP, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_V_STOP, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_V_STOP, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_V_STOP, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -545,15 +545,15 @@ void Stepper_Config_RAMP(uint8_t WichStepper, uint32_t Vtarget, uint32_t Vstart,
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_A_1, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_A_1, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_A_1, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_A_1, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_A_1, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_A_1, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
     
@@ -569,15 +569,15 @@ void Stepper_Config_RAMP(uint8_t WichStepper, uint32_t Vtarget, uint32_t Vstart,
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_V_1, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_V_1, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_V_1, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_V_1, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_V_1, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_V_1, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
     
@@ -592,15 +592,15 @@ void Stepper_Config_RAMP(uint8_t WichStepper, uint32_t Vtarget, uint32_t Vstart,
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_A_MAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_A_MAX, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_A_MAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_A_MAX, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_A_MAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_A_MAX, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -620,15 +620,15 @@ void Stepper_Config_RAMP(uint8_t WichStepper, uint32_t Vtarget, uint32_t Vstart,
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_D_MAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_D_MAX, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_D_MAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_D_MAX, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_D_MAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_D_MAX, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -643,15 +643,15 @@ void Stepper_Config_RAMP(uint8_t WichStepper, uint32_t Vtarget, uint32_t Vstart,
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_D_1, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_D_1, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_D_1, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_D_1, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_D_1, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_D_1, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 }
@@ -686,15 +686,15 @@ void Stepper_Config_uStep_Pos_Direction(uint8_t WichStepper, int32_t microstep_n
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
     
@@ -712,15 +712,15 @@ void Stepper_Config_uStep_Pos_Direction(uint8_t WichStepper, int32_t microstep_n
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -736,15 +736,15 @@ void Stepper_Config_uStep_Pos_Direction(uint8_t WichStepper, int32_t microstep_n
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_V_MAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_V_MAX, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_V_MAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_V_MAX, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_V_MAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_V_MAX, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
  
@@ -798,15 +798,15 @@ void EarlyRampTermination_InPosMode(uint8_t WichStepper)
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
     
@@ -815,15 +815,15 @@ void EarlyRampTermination_InPosMode(uint8_t WichStepper)
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_VMAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_VMAX, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_VMAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_VMAX, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_VMAX, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_VMAX, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 }
@@ -892,15 +892,15 @@ uint32_t Read_RAMP_STAT(uint8_t WichStepper)
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, READ, TMC5130A_REG_ADDR_RAMP_STAT, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, READ, TMC5130A_REG_ADDR_RAMP_STAT, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, READ, TMC5130A_REG_ADDR_RAMP_STAT, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, READ, TMC5130A_REG_ADDR_RAMP_STAT, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, READ, TMC5130A_REG_ADDR_RAMP_STAT, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, READ, TMC5130A_REG_ADDR_RAMP_STAT, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
     
@@ -934,15 +934,15 @@ int32_t Read_XACTUAL(uint8_t WichStepper)
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-            status_reg = WriteReg(STEPPER_Y, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
+            status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
             break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -975,15 +975,15 @@ uint32_t Clear_XACTUAL(uint8_t WichStepper)
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -992,15 +992,15 @@ uint32_t Clear_XACTUAL(uint8_t WichStepper)
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -1009,15 +1009,15 @@ uint32_t Clear_XACTUAL(uint8_t WichStepper)
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 
@@ -1051,15 +1051,15 @@ void Stepper_Config_XTARGET_Only(uint8_t WichStepper, int pos_microstep_number)
     switch(WichStepper)
     {
     	case STEPPER_X :
-    		status_reg = WriteReg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_X, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Y :
-    		status_reg = WriteReg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Y, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
     	break;
 
     	case STEPPER_Z :
-    		status_reg = WriteReg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
+    		status_reg = TMC5130A_Read_Write_Reg(STEPPER_Z, WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
     	break;
     }
 }

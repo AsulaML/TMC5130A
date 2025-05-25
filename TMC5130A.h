@@ -99,21 +99,21 @@ extern "C" {
     #define TMC5130A_REG_ADDR_V_STOP                0x2B	// Motor stop velocity (unsigned)
     #define TMC5130A_REG_ADDR_TZEROWAIT             0x2C	// Defines  the  waiting  time  after  ramping  down
 
-    #define TMC5130A_REG_ADDR_X_TARGET              0x2D	//Target position for ramp mode
-    #define TMC5130A_REG_ADDR_V_DC_MIN              0x33	//Minimum velocity for deceleration 
-    #define TMC5130A_REG_ADDR_SW_MODE               0x34	//Switch mode configuration
-    #define TMC5130A_REG_ADDR_RAMP_STAT             0x35	//Ramp status and switch event status
-    #define TMC5130A_REG_ADDR_X_LATCH               0x36	//Latches  XACTUAL  upon  a programmable switch event
-    #define TMC5130A_REG_ADDR_CHOPCONF              0x6C	//Chopper and driver configuration
-    #define TMC5130A_REG_ADDR_COOLCONF              0x6D	//coolStep smart current control register and stallGuard2 configuration
+    #define TMC5130A_REG_ADDR_X_TARGET              0x2D	// Target position for ramp mode
+    #define TMC5130A_REG_ADDR_V_DC_MIN              0x33	// Minimum velocity for deceleration 
+    #define TMC5130A_REG_ADDR_SW_MODE               0x34	// Switch mode configuration
+    #define TMC5130A_REG_ADDR_RAMP_STAT             0x35	// Ramp status and switch event status
+    #define TMC5130A_REG_ADDR_X_LATCH               0x36	// Latches  XACTUAL  upon  a programmable switch event
+    #define TMC5130A_REG_ADDR_CHOPCONF              0x6C	// Chopper and driver configuration
+    #define TMC5130A_REG_ADDR_COOLCONF              0x6D	// coolStep smart current control register and stallGuard2 configuration
     #define TMC5130A_REG_ADDR_DC_CTRL               0x6E
-    #define TMC5130A_REG_ADDR_DRV_STATUS            0x6F	//stallGuard2 value and driver error flags
+    #define TMC5130A_REG_ADDR_DRV_STATUS            0x6F	// stallGuard2 value and driver error flags
     #define TMC5130A_REG_ADDR_PWM_CONF              0x70
     #define TMC5130A_REG_ADDR_LOST_STEPS            0x73
 
 
 
-uint8_t WriteReg(uint8_t WichStepper, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData);
+uint8_t TMC5130A_Read_Write_Reg(uint8_t WichStepper, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData);
 void Stepper_Init(uint8_t WichStepper, uint8_t mode);
 void Stepper_Config_RampMode_Only(uint8_t WichStepper, uint8_t mode);
 void Stepper_Config_Courants_GeneralPurpose(uint8_t WichStepper, uint8_t  irun, uint8_t  ihold, uint8_t mode);

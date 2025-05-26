@@ -72,8 +72,8 @@ extern "C" {
     #define V_MINUS_MODE 2
     #define HOLD_MODE 3
     
-    #define READ 0
-    #define WRITE 1 
+    #define TMC5130A_READ 0
+    #define TMC5130A_WRITE 1 
 
     // TRINAMIC TMC5130 Register Address Defines
 

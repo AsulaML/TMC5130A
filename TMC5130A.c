@@ -28,26 +28,12 @@ void CS_Deselect_Z(void)  { CS_Z = 1; }
 // WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
 // return the status value
 // RW 1 for write and 0 for read
-uint8_t TMC5130A_Read_Write_Reg(uint8_t WichStepper, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData)
+uint8_t TMC5130A_Read_Write_Reg(StepperDriver* driver, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData)
 {
     uint8_t first_byte = (RW << 7) | (reg_adr & 0x7F);
     uint8_t status_reg = 0;
 
-    // pull down the good CS
-    switch(WichStepper)
-    {
-    	case STEPPER_X :
-    		CS_X = 0;
-    	break;
-
-    	case STEPPER_Y :
-    		CS_Y = 0;
-    	break;
-
-    	case STEPPER_Z :
-    		CS_Z = 0;
-    	break;
-    }
+    driver->CS_Select();
     
     // first transaction containt the addr and RW bit
     SPI2_Exchange(&first_byte, &status_reg);
@@ -57,41 +43,14 @@ uint8_t TMC5130A_Read_Write_Reg(uint8_t WichStepper, uint8_t RW, uint8_t reg_adr
     SPI2_Exchange(pTransmitData+2,pReceiveData);
     SPI2_Exchange(pTransmitData+3,pReceiveData);
 
-    // pull up the good CS
-    switch(WichStepper)
-    {
-    	case STEPPER_X :
-    		CS_X = 1;
-    	break;
+    driver->CS_Deselect();
 
-    	case STEPPER_Y :
-    		CS_Y = 1;
-    	break;
-
-    	case STEPPER_Z :
-    		CS_Z = 1;
-    	break;
-    }
     
     
     if (RW == TMC5130A_READ) 
     {
         
-	    // pull down the good CS
-	    switch(WichStepper)
-	    {
-	    	case STEPPER_X :
-	    		CS_X = 0;
-	    	break;
-
-	    	case STEPPER_Y :
-	    		CS_Y = 0;
-	    	break;
-
-	    	case STEPPER_Z :
-	    		CS_Z = 0;
-	    	break;
-	    }
+        driver->CS_Select();
 
         // first transaction containt the addr and RW bit
         SPI2_Exchange(&first_byte, &status_reg);
@@ -101,21 +60,7 @@ uint8_t TMC5130A_Read_Write_Reg(uint8_t WichStepper, uint8_t RW, uint8_t reg_adr
         SPI2_Exchange(pTransmitData+2,pReceiveData+2);
         SPI2_Exchange(pTransmitData+3,pReceiveData+3);
 
-	    // pull up the good CS
-	    switch(WichStepper)
-	    {
-	    	case STEPPER_X :
-	    		CS_X = 1;
-	    	break;
-
-	    	case STEPPER_Y :
-	    		CS_Y = 1;
-	    	break;
-
-	    	case STEPPER_Z :
-	    		CS_Z = 1;
-	    	break;
-	    }
+        driver->CS_Deselect();
         
     }    
     

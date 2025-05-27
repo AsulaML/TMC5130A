@@ -38,10 +38,10 @@ uint8_t TMC5130A_Read_Write_Reg(StepperDriver* driver, uint8_t RW, uint8_t reg_a
     // first transaction containt the addr and RW bit
     SPI2_Exchange(&first_byte, &status_reg);
     
-    SPI2_Exchange(pTransmitData,pReceiveData);
-    SPI2_Exchange(pTransmitData+1,pReceiveData);
-    SPI2_Exchange(pTransmitData+2,pReceiveData);
-    SPI2_Exchange(pTransmitData+3,pReceiveData);
+    for (uint8_t i = 0; i < 4; i++) 
+    {
+        SPI2_Exchange(pTransmitData + i, pReceiveData + i);
+    }
 
     driver->CS_Deselect();
 

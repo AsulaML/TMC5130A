@@ -14,18 +14,17 @@ int32_t VMAX_MEMO;
 int32_t VSTART_MEMO = 0;
 
 
+// TODO : 
+// Transformer XYZ en instante
+// CS define -> passage de param
+
 // WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
 // return the status value
 // RW 1 for write and 0 for read
 uint8_t TMC5130A_Read_Write_Reg(uint8_t WichStepper, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData)
 {
-    uint8_t first_byte = 0;
+    uint8_t first_byte = (RW << 7) | (reg_adr & 0x7F);
     uint8_t status_reg = 0;
-    
-    first_byte = RW << 7;
-    reg_adr = reg_adr & 0x7F;
-    first_byte |= reg_adr;
-    
 
     // pull down the good CS
     switch(WichStepper)

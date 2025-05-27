@@ -14,9 +14,16 @@ int32_t VMAX_MEMO;
 int32_t VSTART_MEMO = 0;
 
 
-// TODO : 
-// Transformer XYZ en instante
-// CS define -> passage de param
+void CS_Select_X(void)    { CS_X = 0; }
+void CS_Deselect_X(void)  { CS_X = 1; }
+
+void CS_Select_Y(void)    { CS_Y = 0; }
+void CS_Deselect_Y(void)  { CS_Y = 1; }
+
+void CS_Select_Z(void)    { CS_Z = 0; }
+void CS_Deselect_Z(void)  { CS_Z = 1; }
+
+
 
 // WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
 // return the status value

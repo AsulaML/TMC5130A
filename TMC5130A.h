@@ -113,6 +113,20 @@ extern "C" {
 
 
 
+typedef struct {
+    uint8_t id;
+    void (*CS_Select)(void);
+    void (*CS_Deselect)(void);
+} StepperDriver;
+
+
+void CS_Select_X(void);
+void CS_Deselect_X(void);
+void CS_Select_Y(void);
+void CS_Deselect_Y(void);
+void CS_Select_Z(void);
+void CS_Deselect_Z(void);
+
 uint8_t TMC5130A_Read_Write_Reg(uint8_t WichStepper, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData);
 void TMC5130A_Init(uint8_t WichStepper, uint8_t mode);
 void TMC5130A_Config_Ramp_Mode(uint8_t WichStepper, uint8_t mode);

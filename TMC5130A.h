@@ -16,17 +16,12 @@ extern "C" {
     #define TMC5130A_CS_Y LATGbits.LATG8                    
     #define TMC5130A_CS_Z LATGbits.LATG9                  
 
-    #define DRIVER_X_AXIS LATGbits.LATG14
-    #define DRIVER_X_AXIS_ENABLE DRIVER_X_AXIS=0
-    #define DRIVER_X_AXIS_DISABLE DRIVER_X_AXIS=1
-    
-    #define DRIVER_Y_AXIS LATBbits.LATB4    
-    #define DRIVER_Y_AXIS_ENABLE DRIVER_Y_AXIS=0
-    #define DRIVER_Y_AXIS_DISABLE DRIVER_Y_AXIS=1
+    #define TMC5130A_EN_X LATGbits.LATG14
+    #define TMC5130A_EN_Y LATBbits.LATB4   
+    #define TMC5130A_EN_Z LATBbits.LATB7  
 
-    #define DRIVER_Z_AXIS LATBbits.LATB7     
-    #define DRIVER_Z_AXIS_ENABLE DRIVER_Z_AXIS=0
-    #define DRIVER_Z_AXIS_DISABLE DRIVER_Z_AXIS=1
+
+
     
 
     #define CLK_DRV  LATEbits.LATE5                // same for all
@@ -117,6 +112,8 @@ typedef struct {
     uint8_t id;
     void (*CS_Select)(void);
     void (*CS_Deselect)(void);
+    void (*Enable)(void);
+    void (*Disable)(void);
 } StepperDriver;
 
 
@@ -127,20 +124,23 @@ void CS_Deselect_Y(void);
 void CS_Select_Z(void);
 void CS_Deselect_Z(void);
 
-uint8_t TMC5130A_Read_Write_Reg(uint8_t WichStepper, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData);
-void TMC5130A_Init(uint8_t WichStepper, uint8_t mode);
-void TMC5130A_Config_Ramp_Mode(uint8_t WichStepper, uint8_t mode);
-void TMC5130A_Config_Courants(uint8_t WichStepper, uint8_t  irun, uint8_t  ihold, uint8_t mode);
-void TMC5130A_Config_Ramp(uint8_t WichStepper, uint32_t Vtarget, uint32_t Vstart, uint32_t Vstop, uint32_t V1, uint32_t Amax, uint32_t A1, uint32_t Dmax, uint32_t D1);
-void TMC5130A_Config_uStep_Pos_Direction(uint8_t WichStepper, int32_t microstep_number, uint8_t rot_dir, int32_t offset);
-void TMC5130A_EarlyRampTermination_InPosMode(uint8_t WichStepper);
+
+uint8_t TMC5130A_Read_Write_Reg(StepperDriver* driver, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData);
+void TMC5130A_Init(StepperDriver* driver, uint8_t mode);
+void TMC5130A_Config_Ramp_Mode(StepperDriver* driver, uint8_t mode);
+void TMC5130A_Config_Courants(StepperDriver* driver, uint8_t  irun, uint8_t  ihold, uint8_t mode);
+void TMC5130A_Config_Ramp(StepperDriver* driver, uint32_t Vtarget, uint32_t Vstart, uint32_t Vstop, uint32_t V1, uint32_t Amax, uint32_t A1, uint32_t Dmax, uint32_t D1);
+void TMC5130A_Config_uStep_Pos_Direction(StepperDriver* driver, int32_t microstep_number, uint8_t rot_dir, int32_t offset);
+void TMC5130A_EarlyRampTermination_InPosMode(StepperDriver* driver);
+
+uint32_t TMC5130A_Read_RAMP_STAT(StepperDriver* driver);
+int32_t TMC5130A_Read_X_ACTUAL(StepperDriver* driver);
+uint32_t TMC5130A_Clear_X_ACTUAL(StepperDriver* driver);
+void TMC5130A_Config_X_TARGET_Only(StepperDriver* driver, int pos_microstep_number);
+
 bool TMC5130A_Is_Motor_Stopped(uint8_t WichStepper);
 bool TMC5130A_Is_Motor_Velocity_Zero(uint8_t WichStepper);
 bool TMC5130A_Is_Motor_Position_Reached(uint8_t WichStepper);
-uint32_t TMC5130A_Read_RAMP_STAT(uint8_t WichStepper);
-int32_t TMC5130A_Read_X_ACTUAL(uint8_t WichStepper);
-uint32_t TMC5130A_Clear_X_ACTUAL(uint8_t WichStepper);
-void TMC5130A_Config_X_TARGET_Only(uint8_t WichStepper, int pos_microstep_number);
 
     
 #ifdef	__cplusplus

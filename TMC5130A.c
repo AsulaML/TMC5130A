@@ -14,14 +14,14 @@ int32_t VMAX_MEMO;
 int32_t VSTART_MEMO = 0;
 
 
-void CS_Select_X(void)    { CS_X = 0; }
-void CS_Deselect_X(void)  { CS_X = 1; }
+void CS_Select_X(void)    { TMC5130A_CS_X = 0; }
+void CS_Deselect_X(void)  { TMC5130A_CS_X = 1; }
 
-void CS_Select_Y(void)    { CS_Y = 0; }
-void CS_Deselect_Y(void)  { CS_Y = 1; }
+void CS_Select_Y(void)    { TMC5130A_CS_Y = 0; }
+void CS_Deselect_Y(void)  { TMC5130A_CS_Y = 1; }
 
-void CS_Select_Z(void)    { CS_Z = 0; }
-void CS_Deselect_Z(void)  { CS_Z = 1; }
+void CS_Select_Z(void)    { TMC5130A_CS_Z = 0; }
+void CS_Deselect_Z(void)  { TMC5130A_CS_Z = 1; }
 
 
 

@@ -12,9 +12,9 @@ extern "C" {
 
     // PORTs to be defined
     
-    #define CS_X LATGbits.LATG7                     
-    #define CS_Y LATGbits.LATG8                    
-    #define CS_Z LATGbits.LATG9                  
+    #define TMC5130A_CS_X LATGbits.LATG7                     
+    #define TMC5130A_CS_Y LATGbits.LATG8                    
+    #define TMC5130A_CS_Z LATGbits.LATG9                  
 
     #define DRIVER_X_AXIS LATGbits.LATG14
     #define DRIVER_X_AXIS_ENABLE DRIVER_X_AXIS=0

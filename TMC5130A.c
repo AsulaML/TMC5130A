@@ -78,7 +78,6 @@ uint8_t TMC5130A_Read_Write_Reg(StepperDriver* driver, uint8_t RW, uint8_t reg_a
 void TMC5130A_Init(StepperDriver* driver, uint8_t mode)
 {
     uint8_t status_reg = 0;
-    uint8_t DataToWrite[4] = {0};
     uint8_t DataReaded[4] = {0};
     
 		
@@ -106,10 +105,13 @@ void TMC5130A_Init(StepperDriver* driver, uint8_t mode)
 
 
     // mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
-    DataToWrite[0] = 0b00000000;   		// 31..24
-    DataToWrite[1] = 0b00000000;   		// 23..16
-    DataToWrite[2] = 0b00000000;   		// 15.. 8
-    DataToWrite[3] = mode & 0x03;   	//  7.. 0
+    uint32_t data = mode & 0x03;  // Seuls les 2 bits de poids faible sont utilisés
+    uint8_t DataToWrite[4] = {
+        (data >> 24) & 0xFF,
+        (data >> 16) & 0xFF,
+        (data >> 8) & 0xFF,
+        data & 0xFF
+    };
 
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
 }
@@ -119,17 +121,18 @@ void TMC5130A_Init(StepperDriver* driver, uint8_t mode)
 // mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
 void TMC5130A_Config_Ramp_Mode(StepperDriver* driver, uint8_t mode)
 {
-    uint8_t DataToWrite[4] = {0};
     uint8_t DataReaded[4] = {0};
     uint8_t status_reg = 0;
-    
 
-	// mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
-    DataToWrite[0] = 0b00000000;   // 31..24
-    DataToWrite[1] = 0b00000000;   // 23..16
-    DataToWrite[2] = 0b00000000;   // 15.. 8
-    DataToWrite[3] = mode & 0x03;   //  7.. 0
-    
+    // mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
+    uint32_t data = mode & 0x03;  // Seuls les 2 bits de poids faible sont utilisés
+    uint8_t DataToWrite[4] = {
+        (data >> 24) & 0xFF,
+        (data >> 16) & 0xFF,
+        (data >> 8) & 0xFF,
+        data & 0xFF
+    };
+
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
 }
 
@@ -140,113 +143,35 @@ void TMC5130A_Config_Ramp_Mode(StepperDriver* driver, uint8_t mode)
 // ihold : 0 � 31 
 void TMC5130A_Config_Courants(StepperDriver* driver, uint8_t  irun, uint8_t  ihold, uint8_t mode)
 {
-    uint8_t DataToWrite[4] = {0};
-    uint8_t DataReaded[4] = {0};
-    uint8_t status_reg = 0;
+    // GCONF : Push-pull (bit 13), PDN disable (bit 2)
+    TMC5130A_Write_4B_Reg(driver, TMC5130A_REG_ADDR_GCONF, 0x00, 0x00, 0x20, 0x04);
 
-            
-    // GENERAL CONFIGURATION REGISTERS 
-    // GCONF 
-    DataToWrite[0] = 0x00;   					// 31..24
-    DataToWrite[1] = 0x00;   					// 23..16
-    DataToWrite[2] = 0b00100000;   				// 15.. 8  bit 13 push pull bit 12 open
-    DataToWrite[3] = 0b00000100;   					//  7.. 0
+    // IHOLD_IRUN : Set run and hold current (5-bit values)
+    TMC5130A_Write_4B_Reg(driver, TMC5130A_REG_ADDR_IHOLD_IRUN, 0x00, 0x00, irun & 0x1F, ihold & 0x1F);
 
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_GCONF, &DataToWrite[0], &DataReaded[0]);
+    // RAMPMODE : motion mode selection (only 2 LSB used)
+    TMC5130A_Write_4B_Reg(driver, TMC5130A_REG_ADDR_RAMPMODE, 0x00, 0x00, 0x00, mode & 0x03);
 
-    
-        
-    // VELOCITY DEPENDENT DRIVER FEATURE CONTROL REGISTER SET 
-    // IHOLD_IRUN 
-    DataToWrite[0] = 0b00000000;   				// 31..24
-    DataToWrite[1] = 0b00000000;   				// 23..16
-    DataToWrite[2] = irun & 0x1F;   			// 15.. 8
-    DataToWrite[3] = ihold & 0x1F;   			//  7.. 0
+    // CHOPCONF : microstepping, blank time, etc.
+    TMC5130A_Write_4B_Reg(driver, TMC5130A_REG_ADDR_CHOPCONF, 0x10, 0x00, 0x00, 0xC3);
 
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_IHOLD_IRUN, &DataToWrite[0], &DataReaded[0]);
+    // PWMCONF : PWM mode configuration
+    TMC5130A_Write_4B_Reg(driver, TMC5130A_REG_ADDR_PWM_CONF, 0x00, 0x04, 0x00, 0x00);
 
+    // TPWMTHRS : threshold for PWM mode (default 0)
+    TMC5130A_Write_4B_Reg(driver, TMC5130A_REG_ADDR_TPWMTHRS, 0x00, 0x00, 0x00, 0x00);
 
-    
-    // RAMP GENERATOR MOTION CONTROL REGISTER SET 
-    // RAMPMODE 
-    DataToWrite[0] = 0b00000000;   				// 31..24
-    DataToWrite[1] = 0b00000000;   				// 23..16
-    DataToWrite[2] = 0b00000000;   				// 15.. 8
-    DataToWrite[3] = mode & 0x03;   			//  7.. 0
+    // V_DC_MIN : minimum DC voltage limit (disabled)
+    TMC5130A_Write_4B_Reg(driver, TMC5130A_REG_ADDR_V_DC_MIN, 0x00, 0x00, 0x00, 0x00);
 
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    // DC_CTRL : DC Stepper settings
+    TMC5130A_Write_4B_Reg(driver, TMC5130A_REG_ADDR_DC_CTRL, 0x00, 0x00, 0x00, 0x00);
 
+    // COOLCONF : StallGuard and smart energy control
+    TMC5130A_Write_4B_Reg(driver, TMC5130A_REG_ADDR_COOLCONF, 0x01, 0x7F, 0x00, 0x00);
 
-
-    DataToWrite[0] = 0b00010000;   				// 31..24
-    DataToWrite[1] = 0x00;   					// 23..16
-    DataToWrite[2] = 0x00;   					// 15.. 8
-    DataToWrite[3] = 0xC3;   					//  7.. 0
-    
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_CHOPCONF, &DataToWrite[0], &DataReaded[0]);
-
-
-    
-    
-    // PWMCONF 
-    DataToWrite[0] = 0b00000000;   				// 31..24
-    DataToWrite[1] = 0b00000100;   				// 23..16
-    DataToWrite[2] = 0b00000000;   				// 15.. 8
-    DataToWrite[3] = 0b00000000;   				//  7.. 0
-    
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_PWM_CONF, &DataToWrite[0], &DataReaded[0]);
-
-
-    
-    DataToWrite[0] = 0x00;   					// 31..24
-    DataToWrite[1] = 0x00;   					// 23..16
-    DataToWrite[2] = 0x00;   					// 15.. 8
-    DataToWrite[3] = 0x00;   					//  7.. 0
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_TPWMTHRS, &DataToWrite[0], &DataReaded[0]);
-
-
-    //------------------------------------------------------------------
-    
-    DataToWrite[0] = 0x00;          			// 31..24
-    DataToWrite[1] = 0x00;          			// 23..16
-    DataToWrite[2] = 0x00;//0x08;          		// 15.. 8
-    DataToWrite[3] = 0x00;//0x15;          		//  7.. 0
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_V_DC_MIN, &DataToWrite[0], &DataReaded[0]);
-
-    
-    
-    
-    // bit 23? 16  DCTIME sup�rieur � TBL
-    // bit 9? 0    Set slightly above effective blank time TBL
-    DataToWrite[0] = 0x00;      				// 31..24  
-    DataToWrite[1] = 0x00;//3;         			// 23..16   DC SG
-    DataToWrite[2] = 0x00;      				// 15.. 8
-    DataToWrite[3] = 0x00;//37;        			//  7.. 0   DC TIME
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_DC_CTRL, &DataToWrite[0], &DataReaded[0]);
-    
-    
-    
-    uint8_t stall_treshold = 64;
-    //COOL CONF
-    DataToWrite[0] = 0x01;          			// 31..24  
-    DataToWrite[1] = 0b01111111;//3;         	// 23..16   DC SG
-    DataToWrite[2] = 0x00;          			// 15.. 8 	semax sedn
-    DataToWrite[3] = 0x00;//37;       			//  7.. 0 	semin   DC TIME
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_COOLCONF, &DataToWrite[0], &DataReaded[0]);
-
-    
-    
-    //COOL CONF
-    DataToWrite[0] = 0x00;          			// 31..24  
-    DataToWrite[1] = 0x00;         				// 23..16   DC SG
-    DataToWrite[2] = 0x00;          			// 15.. 8	semax sedn
-    DataToWrite[3] = 0x00;          			//  7.. 0	semin   DC TIME
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_TCOOLTHRS, &DataToWrite[0], &DataReaded[0]);
+    // TCOOLTHRS : Threshold for switching to CoolStep (default 0)
+    TMC5130A_Write_4B_Reg(driver, TMC5130A_REG_ADDR_TCOOLTHRS, 0x00, 0x00, 0x00, 0x00);
 }
 
 
@@ -264,76 +189,20 @@ void TMC5130A_Config_Ramp(StepperDriver* driver, uint32_t Vtarget, uint32_t Vsta
     uint8_t DataToWrite[4] = {0};
     uint8_t DataReaded[4] = {0};
 
-    
-	// Positionning mode by default (A,D,V params)
-    DataToWrite[0] = 0b00000000;   						// 31..24
-    DataToWrite[1] = 0b00000000;   						// 23..16
-    DataToWrite[2] = 0b00000000;   						// 15.. 8
-    DataToWrite[3] = 0b00000000;   						//  7.. 0
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_RAMPMODE, 0);
 
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_V_STOP, Vstop);
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_A_1, A1);
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_V_1, V1);
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_A_MAX, Amax);
 
 
-    //Vstop : vitesse en fin de rampe 
-    DataToWrite[0] = ((Vstop & 0xFF000000)>> 24);      	// 31..24
-    DataToWrite[1] = ((Vstop & 0x00FF0000)>> 16);       // 23..16
-    DataToWrite[2] = ((Vstop & 0x0000FF00)>> 8);        // 15.. 8
-    DataToWrite[3] =   Vstop & 0x000000FF;              //  7.. 0
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_V_STOP, &DataToWrite[0], &DataReaded[0]);
-
-    
-	// A_1 : premi�re phase d'acc�l�ration (1/2) si V1 diff�rent de 0 
-    DataToWrite[0] =  ((A1 & 0xFF000000)>> 24);        	// 31..24
-    DataToWrite[1] =  ((A1 & 0x00FF0000)>> 16);         // 23..16
-    DataToWrite[2] =  ((A1 & 0x0000FF00)>> 8);          // 15.. 8
-    DataToWrite[3] =    A1 & 0x000000FF;                //  7.. 0
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_A_1, &DataToWrite[0], &DataReaded[0]);
-
-    
-    // V_1 : vitesse interm�diaire s�parant les deux phases d'acc�l�ration si = 0 alors A1 D1 sont NA
-    DataToWrite[0] = ((V1 & 0xFF000000)>> 24);         	// 31..24
-    DataToWrite[1] = ((V1 & 0x00FF0000)>> 16);          // 23..16
-    DataToWrite[2] = ((V1 & 0x0000FF00)>> 8);           // 15.. 8
-    DataToWrite[3] =   V1 & 0x000000FF;                 //  7.. 0
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_V_1, &DataToWrite[0], &DataReaded[0]);
-
-    
-
-    // AMAX : deuxi�me phase d'acc�l�ration (2/2) ou (1/1) si V1 = 0 
-    DataToWrite[0] = ((Amax & 0xFF000000)>> 24);        // 31..24
-    DataToWrite[1] = ((Amax & 0x00FF0000)>> 16);        // 23..16
-    DataToWrite[2] = ((Amax & 0x0000FF00)>> 8);         // 15.. 8
-    DataToWrite[3] =   Amax & 0x000000FF;               //  7.. 0
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_A_MAX, &DataToWrite[0], &DataReaded[0]);
-
-
-    // Memorise Vmax Vstart for Config_X_uStep_Number_Direction(...) 
-    // car la fonction early ramp termination � besoin de mettre Vmax et Vstart � 0 
-    // il faut alors le remettre dans Config_X_uStep_Number_Direction(...) 
+    // Memorize for future use
     VMAX_MEMO = Vtarget;
     VSTART_MEMO = Vstart;
     
-	// DMAX : deuxi�me phase de d�c�l�ration (2/2) ou (1/1) si V1 = 0 
-    DataToWrite[0] = ((Dmax & 0xFF000000)>> 24);        // 31..24
-    DataToWrite[1] = ((Dmax & 0x00FF0000)>> 16);        // 23..16
-    DataToWrite[2] = ((Dmax & 0x0000FF00)>> 8);        // 15.. 8
-    DataToWrite[3] =   Dmax & 0x000000FF;               //  7.. 0
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_D_MAX, &DataToWrite[0], &DataReaded[0]);
-
-
-    
-	// D_1 : premi�re phase de d�c�l�ration (1/2) si V1 diff�rent de 0 sinon mettre 0x10 
-    DataToWrite[0] = ((D1 & 0xFF000000)>> 24);         // 31..24
-    DataToWrite[1] = ((D1 & 0x00FF0000)>> 16);          // 23..16
-    DataToWrite[2] = ((D1 & 0x0000FF00)>> 8);           // 15.. 8
-    DataToWrite[3] =   D1 & 0x000000FF;                 //  7.. 0
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_D_1, &DataToWrite[0], &DataReaded[0]);
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_D_MAX, Dmax);
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_D_1, D1);
 }
 
 
@@ -582,4 +451,23 @@ void TMC5130A_Config_X_TARGET_Only(StepperDriver* driver, int pos_microstep_numb
     DataToWrite[3] =   pos_microstep_number & 0x000000FF;               //  7.. 0
     
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
+}
+
+void TMC5130A_Write_4B_Reg(StepperDriver* driver, uint8_t reg_addr, uint8_t b3, uint8_t b2, uint8_t b1, uint8_t b0) 
+{
+    uint8_t DataToWrite[4] = {b3, b2, b1, b0};
+    uint8_t DataReaded[4];
+    TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, reg_addr, DataToWrite, DataReaded);
+}
+
+void TMC5130A_Write_32b_Reg(StepperDriver* driver, uint8_t reg_addr, uint32_t value)
+{
+    uint8_t DataToWrite[4] = {
+        (value >> 24) & 0xFF,
+        (value >> 16) & 0xFF,
+        (value >> 8) & 0xFF,
+        value & 0xFF
+    };
+    uint8_t DataReaded[4] = {0};
+    TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, reg_addr, DataToWrite, DataReaded);
 }

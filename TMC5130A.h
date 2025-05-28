@@ -126,6 +126,9 @@ void CS_Deselect_Z(void);
 
 
 uint8_t TMC5130A_Read_Write_Reg(StepperDriver* driver, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData);
+void TMC5130A_Write_4B_Reg(StepperDriver* driver, uint8_t reg_addr, uint8_t b3, uint8_t b2, uint8_t b1, uint8_t b0);
+void TMC5130A_Write_32b_Reg(StepperDriver* driver, uint8_t reg_addr, uint32_t value);
+
 void TMC5130A_Init(StepperDriver* driver, uint8_t mode);
 void TMC5130A_Config_Ramp_Mode(StepperDriver* driver, uint8_t mode);
 void TMC5130A_Config_Courants(StepperDriver* driver, uint8_t  irun, uint8_t  ihold, uint8_t mode);

@@ -145,6 +145,7 @@ bool TMC5130A_Is_Motor_Stopped(uint8_t WichStepper);
 bool TMC5130A_Is_Motor_Velocity_Zero(uint8_t WichStepper);
 bool TMC5130A_Is_Motor_Position_Reached(uint8_t WichStepper);
 
+uint32_t BytesToUint32(uint8_t* data);
     
 #ifdef	__cplusplus
 }

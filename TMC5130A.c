@@ -329,10 +329,7 @@ uint32_t TMC5130A_Read_RAMP_STAT(StepperDriver* driver)
 
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_READ, TMC5130A_REG_ADDR_RAMP_STAT, &DataToWrite[0], &DataReaded[0]);
     
-    read_reg = DataReaded[0] << 24;
-    read_reg |= (DataReaded[1] << 16);
-    read_reg |= (DataReaded[2] << 8);
-    read_reg |= (DataReaded[3] << 0);
+    read_reg =  BytesToUint32(&DataReade[0]]);
     
     return(read_reg);
 }
@@ -355,10 +352,7 @@ int32_t TMC5130A_Read_X_ACTUAL(StepperDriver* driver)
 
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
 
-    read_reg  = DataReaded[0] << 24;
-    read_reg |= (DataReaded[1] << 16);
-    read_reg |= (DataReaded[2] << 8);
-    read_reg |= (DataReaded[3] << 0);
+    read_reg =  BytesToUint32(&DataReade[0]]);
     
     return(read_reg);
 }
@@ -385,11 +379,7 @@ uint32_t TMC5130A_Clear_X_ACTUAL(StepperDriver* driver)
 
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
 
-   
-    read_reg  = DataReaded[0] << 24;
-    read_reg |= (DataReaded[1] << 16);
-    read_reg |= (DataReaded[2] << 8);
-    read_reg |= (DataReaded[3] << 0);
+    read_reg =  BytesToUint32(&DataReade[0]]);
     
     if ( (read_reg <= 50) || (read_reg >= -50) ) return 0;
     else return ERROR_DRIVER_MOTOR;   
@@ -420,4 +410,12 @@ void TMC5130A_Write_32b_Reg(StepperDriver* driver, uint8_t reg_addr, uint32_t va
     };
     uint8_t DataReaded[4] = {0};
     TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, reg_addr, DataToWrite, DataReaded);
+}
+
+uint32_t BytesToUint32(uint8_t* data)
+{
+    return  ((uint32_t)data[0] << 24) |
+            ((uint32_t)data[1] << 16) |
+            ((uint32_t)data[2] << 8)  |
+            ((uint32_t)data[3]);
 }

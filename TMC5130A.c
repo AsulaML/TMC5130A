@@ -400,18 +400,7 @@ uint32_t TMC5130A_Clear_X_ACTUAL(StepperDriver* driver)
 // microstep_number : position in number microstep 256 ustep -> 1 step
 void TMC5130A_Config_X_TARGET_Only(StepperDriver* driver, int pos_microstep_number)
 {
-    uint8_t status_reg = 0;
-    uint8_t DataToWrite[4] = {0};
-    uint8_t DataReaded[4] = {0};
-    
-    // TO START A MOTION
-    // XTARGET 
-    DataToWrite[0] = ((pos_microstep_number & 0xFF000000)>> 24);        // 31..24
-    DataToWrite[1] = ((pos_microstep_number & 0x00FF0000)>> 16);        // 23..16
-    DataToWrite[2] = ((pos_microstep_number & 0x0000FF00)>> 8);         // 15.. 8 
-    DataToWrite[3] =   pos_microstep_number & 0x000000FF;               //  7.. 0
-    
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_X_TARGET, pos_microstep_number);
 }
 
 void TMC5130A_Write_4B_Reg(StepperDriver* driver, uint8_t reg_addr, uint8_t b3, uint8_t b2, uint8_t b1, uint8_t b0) 

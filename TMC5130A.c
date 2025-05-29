@@ -226,38 +226,19 @@ void TMC5130A_Config_Ramp(StepperDriver* driver, uint32_t Vtarget, uint32_t Vsta
  */
 void TMC5130A_Config_uStep_Pos_Direction(StepperDriver* driver, int32_t microstep_number, uint8_t rot_dir, int32_t offset)
 {
-    // signed microstep position
+    int time = 100;
     int32_t pos = microstep_number;
 		
     TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_X_TARGET, pos);
     TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_VSTART, VSTART_MEMO);
     TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_V_MAX, VMAX_MEMO);
     
-    
-    
     // Sort de la fonction lorsque la vitesse du moteur est non nulle (100ms max)
-    int time = 100;
-    while(time--) 
+    while (timeout_ms--)
     {
         delay_ms(1);
-				
-				// 	Proceed the transfert to the good Stepper
-				switch(WichStepper)
-				{
-					case STEPPER_X :
-						if (!TMC5130A_Is_Motor_Stopped(STEPPER_X)) return;
-					break;
-
-					case STEPPER_Y :
-						if (!TMC5130A_Is_Motor_Stopped(STEPPER_Y)) return;
-					break;
-
-					case STEPPER_Z :
-						if (!TMC5130A_Is_Motor_Stopped(STEPPER_Z)) return;
-					break;
-				}
-        
-    };
+        if (!TMC5130A_Is_Motor_Stopped(driver)) return;
+    }
 }
 
 /**

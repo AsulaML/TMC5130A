@@ -177,15 +177,21 @@ void TMC5130A_Config_Courants(StepperDriver* driver, uint8_t  irun, uint8_t  iho
     TMC5130A_Write_4B_Reg(driver, TMC5130A_REG_ADDR_TCOOLTHRS, 0x00, 0x00, 0x00, 0x00);
 }
 
-
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-// Positionning mode by default (A,D,V params)
-// Vstop : vitesse en fin de rampe
-// V_1 : vitesse interm�diaire s�parant les deux phases d'acc�l�ration si = 0 alors A1 D1 sont NA
-// A_1 : premi�re phase d'acc�l�ration (1/2) si V1 diff�rent de 0 
-// AMAX : deuxi�me phase d'acc�l�ration (2/2) ou (1/1) si V1 = 0
-// D_1 : premi�re phase de d�c�l�ration (1/2) si V1 diff�rent de 0 sinon mettre 0x10 
-// DMAX : deuxi�me phase de d�c�l�ration (2/2) ou (1/1) si V1 = 0 
+/**
+ * \fn TMC5130A_Config_Ramp_Mode
+ * \brief Fonction de config du mode du TMC5130A.
+ *
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \param    uint32_t Vtarget : 
+ * \param    uint32_t Vstart : 
+ * \param    uint32_t Vstop : vitesse en fin de rampe
+ * \param    uint32_t V1 : vitesse interm�diaire s�parant les deux phases d'acc�l�ration si = 0 alors A1 D1 sont NA
+ * \param    uint32_t Amax : deuxi�me phase d'acc�l�ration (2/2) ou (1/1) si V1 = 0
+ * \param    uint32_t A1 : premi�re phase d'acc�l�ration (1/2) si V1 diff�rent de 0 
+ * \param    uint32_t Dmax : deuxi�me phase de d�c�l�ration (2/2) ou (1/1) si V1 = 0 
+ * \param    uint32_t D1 : premi�re phase de d�c�l�ration (1/2) si V1 diff�rent de 0 sinon mettre 0x10 
+ * \return   void
+ */
 void TMC5130A_Config_Ramp(StepperDriver* driver, uint32_t Vtarget, uint32_t Vstart, uint32_t Vstop, uint32_t V1, uint32_t Amax, uint32_t A1, uint32_t Dmax, uint32_t D1)
 {
  	uint8_t status_reg = 0;
@@ -208,11 +214,16 @@ void TMC5130A_Config_Ramp(StepperDriver* driver, uint32_t Vtarget, uint32_t Vsta
     TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_D_1, D1);
 }
 
-
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-// microstep_number : number microstep 256 ustep -> 1 step
-// rot_dir : sens de rotation 0 ou 1 
-// offset : ajouter un offstep de microstep 
+/**
+ * \fn TMC5130A_Config_uStep_Pos_Direction
+ * \brief Fonction de pilotage déplacement du TMC5130A.
+ *
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \param    int32_t microstep_number : number microstep 256 ustep -> 1 step
+ * \param    uint8_t rot_dir : sens de rotation 0 ou 1 
+ * \param    int32_t offset : ajouter un offstep de microstep 
+ * \return   void
+ */
 void TMC5130A_Config_uStep_Pos_Direction(StepperDriver* driver, int32_t microstep_number, uint8_t rot_dir, int32_t offset)
 {
     // signed microstep position
@@ -249,12 +260,14 @@ void TMC5130A_Config_uStep_Pos_Direction(StepperDriver* driver, int32_t microste
     };
 }
 
-
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-// VSTART = 0
-// VMAX = 0 
-// For a stop in positioning mode, set VSTART=0 and VMAX=0. VSTOP is not used in this case. The
-// driver will use AMAX and A1 (as determined by V1) for going to zero velocity.
+/**
+ * \fn TMC5130A_EarlyRampTermination_InPosMode
+ * \brief Fonction pour arreter le moteur TMC5130A.
+ *  For a stop in positioning mode, set VSTART=0 and VMAX=0. VSTOP is not used in this case. The
+ *  driver will use AMAX and A1 (as determined by V1) for going to zero velocity.
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \return   void
+ */
 void TMC5130A_EarlyRampTermination_InPosMode(StepperDriver* driver)
 {
     uint8_t status_reg = 0;
@@ -262,17 +275,20 @@ void TMC5130A_EarlyRampTermination_InPosMode(StepperDriver* driver)
     uint8_t DataReaded[4] = {0};
     
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
-
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_V_MAX, &DataToWrite[0], &DataReaded[0]);
 }
 
 
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-// return TRUE -> v = 0 ; FALSE -> v != 0
-bool TMC5130A_Is_Motor_Stopped(uint8_t WichStepper) 
+/**
+ * \fn TMC5130A_Is_Motor_Stopped
+ * \brief Fonction pour savoir si le moteur ne bouge plus.
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \return   TRUE -> v = 0 ; FALSE -> v != 0
+ */
+bool TMC5130A_Is_Motor_Stopped(StepperDriver* driver) 
 {
     // Test flags to be sure that the velocity zero flag is set
-    if (TMC5130A_Is_Motor_Velocity_Zero(WichStepper))
+    if (TMC5130A_Is_Motor_Velocity_Zero(driver))
     {
         return true;
     }
@@ -281,37 +297,48 @@ bool TMC5130A_Is_Motor_Stopped(uint8_t WichStepper)
 }
 
 
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-// return TRUE -> v = 0 ; FALSE -> v != 0
-bool TMC5130A_Is_Motor_Velocity_Zero(uint8_t WichStepper)
+/**
+ * \fn TMC5130A_Is_Motor_Velocity_Zero
+ * \brief Fonction pour savoir si le moteur ne bouge plus.
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \return   TRUE -> v = 0 ; FALSE -> v != 0
+ */
+bool TMC5130A_Is_Motor_Velocity_Zero(StepperDriver* driver)
 {
-    
     delay_ms(1);
     
     // Read & Reset events flags 
-    uint32_t flags = TMC5130A_Read_RAMP_STAT(WichStepper);
+    uint32_t flags = TMC5130A_Read_RAMP_STAT(driver);
     
-    if ((flags & 0b010000000000) != 0) return true;
+    if ((flags & TMC5130A_MASK_VEL_ZERO) != 0) return true;
     else return false;
 }
 
 
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-//Signals, that the target position is reached. 
-bool TMC5130A_Is_Motor_Position_Reached(uint8_t WichStepper)
+/**
+ * \fn TMC5130A_Is_Motor_Position_Reached
+ * \brief Fonction pour savoir si la position est atteinte.
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \return   TRUE -> reached; FALSE -> not reached
+ */
+bool TMC5130A_Is_Motor_Position_Reached(StepperDriver* driver)
 {
-    
     delay_ms(1);
     
     // Read & Reset events flags 
-    uint32_t flags = TMC5130A_Read_RAMP_STAT(WichStepper);
+    uint32_t flags = TMC5130A_Read_RAMP_STAT(driver);
     
-    if ((flags & 0b01000000000) != 0) return true;
+    if ((flags & TMC5130A_MASK_POS_REACHED) != 0) return true;
     else return false;
 }
 
 
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
+/**
+ * \fn TMC5130A_Read_RAMP_STAT
+ * \brief Fonction pour lire le registre de status.
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \return   status
+ */
 uint32_t TMC5130A_Read_RAMP_STAT(StepperDriver* driver)
 {
     uint8_t status_reg = 0;
@@ -327,8 +354,12 @@ uint32_t TMC5130A_Read_RAMP_STAT(StepperDriver* driver)
 }
 
 
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-// return XACTUAL signed
+/**
+ * \fn TMC5130A_Read_X_ACTUAL
+ * \brief Fonction pour lire la position du moteur.
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \return   XACTUAL signed
+ */
 int32_t TMC5130A_Read_X_ACTUAL(StepperDriver* driver)
 {
     uint8_t status_reg = 0;
@@ -344,8 +375,13 @@ int32_t TMC5130A_Read_X_ACTUAL(StepperDriver* driver)
 }
 
 
-// Fonction qui permet de faire le z�ro de la position 
-// A utiliser lorsque on se fixe la position de r�f�rence avec le fin de course.
+
+/**
+ * \fn TMC5130A_Clear_X_ACTUAL
+ * \brief Fonction pour réaliser le zero de la position du moteur.
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \return   read_reg
+ */
 uint32_t TMC5130A_Clear_X_ACTUAL(StepperDriver* driver)
 {
     uint8_t status_reg = 0;
@@ -353,16 +389,8 @@ uint32_t TMC5130A_Clear_X_ACTUAL(StepperDriver* driver)
     uint8_t DataReaded[4] = {0};
     int32_t read_reg = 0;
     
-    
-    DataToWrite[0] = 0x00;                                          // 31..24
-    DataToWrite[1] = 0x00;                                          // 23..16
-    DataToWrite[2] = 0x00;                                          // 15.. 8
-    DataToWrite[3] = 0x00;                                          //  7.. 0
-    
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
-
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
-
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
 
     read_reg =  BytesToUint32(&DataReade[0]]);
@@ -371,13 +399,18 @@ uint32_t TMC5130A_Clear_X_ACTUAL(StepperDriver* driver)
     else return ERROR_DRIVER_MOTOR;   
 }
 
-
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-// microstep_number : position in number microstep 256 ustep -> 1 step
+/**
+ * \fn TMC5130A_Config_X_TARGET_Only
+ * \brief Fonction pour configurer X target.
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \param    int pos_microstep_number : position in number microstep 256 ustep -> 1 step
+ * \return   void
+ */
 void TMC5130A_Config_X_TARGET_Only(StepperDriver* driver, int pos_microstep_number)
 {
     TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_X_TARGET, pos_microstep_number);
 }
+
 
 void TMC5130A_Write_4B_Reg(StepperDriver* driver, uint8_t reg_addr, uint8_t b3, uint8_t b2, uint8_t b1, uint8_t b0) 
 {

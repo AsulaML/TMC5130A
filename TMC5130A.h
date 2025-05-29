@@ -106,6 +106,8 @@ extern "C" {
     #define TMC5130A_REG_ADDR_PWM_CONF              0x70
     #define TMC5130A_REG_ADDR_LOST_STEPS            0x73
 
+    #define TMC5130A_MASK_POS_REACHED 0b01000000000
+    #define TMC5130A_MASK_VEL_ZERO  0b010000000000
 
 
 typedef struct {

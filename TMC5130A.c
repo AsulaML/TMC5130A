@@ -212,51 +212,12 @@ void TMC5130A_Config_Ramp(StepperDriver* driver, uint32_t Vtarget, uint32_t Vsta
 // offset : ajouter un offstep de microstep 
 void TMC5130A_Config_uStep_Pos_Direction(StepperDriver* driver, int32_t microstep_number, uint8_t rot_dir, int32_t offset)
 {
-    uint8_t status_reg = 0;
-    uint8_t DataToWrite[4] = {0};
-    uint8_t DataReaded[4] = {0};
-    
     // signed microstep position
-    int32_t pos = 0;
-    
-    // Changement du sens de rotation � affecter � la position target   
-    //if(rot_dir){pos = offset - microstep_number;}
-    //else{pos = offset + microstep_number;}
-    pos = microstep_number;
+    int32_t pos = microstep_number;
 		
-    
-    // Position de target (sign�e)
-    DataToWrite[0] = ((pos & 0xFF000000)>> 24);        		// 31..24
-    DataToWrite[1] = ((pos & 0x00FF0000)>> 16);        		// 23..16
-    DataToWrite[2] = ((pos & 0x0000FF00)>> 8);         		// 15.. 8 
-    DataToWrite[3] =   pos & 0x000000FF;               		//  7.. 0
-    
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_X_TARGET, &DataToWrite[0], &DataReaded[0]);
-
-    
-    // Memorise Vmax Vstart from Config_X_uStep_Number_Direction(...) 
-    // car la fonction early ramp termination � besoin de mettre Vmax et Vstart � 0 
-    // il faut alors le remettre dans Config_X_uStep_Number_Direction(...) 
-    
-    // Vstart => reprend la valeur de Vstart lors de Stepper_Config_RAMP(...)
-    DataToWrite[0] = ((VSTART_MEMO & 0xFF000000)>> 24);     	// 31..24
-    DataToWrite[1] = ((VSTART_MEMO & 0x00FF0000)>> 16);      	// 23..16
-    DataToWrite[2] = ((VSTART_MEMO & 0x0000FF00)>> 8);       	// 15.. 8
-    DataToWrite[3] =   VSTART_MEMO & 0x000000FF;             	//  7.. 0
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
-
-
-    
-    // Vmax => reprend la valeur de Vmax lors de Stepper_Config_RAMP(...)
-    DataToWrite[0] = ((VMAX_MEMO & 0xFF000000)>> 24);     	// 31..24
-    DataToWrite[1] = ((VMAX_MEMO & 0x00FF0000)>> 16);     	// 23..16
-    DataToWrite[2] = ((VMAX_MEMO & 0x0000FF00)>> 8);      	// 15.. 8
-    DataToWrite[3] =   VMAX_MEMO & 0x000000FF;            	//  7.. 0
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_V_MAX, &DataToWrite[0], &DataReaded[0]);
-
- 
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_X_TARGET, pos);
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_VSTART, VSTART_MEMO);
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_V_MAX, VMAX_MEMO);
     
     
     

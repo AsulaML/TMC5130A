@@ -1,17 +1,11 @@
 #ifndef TMC5130A_H
 #define	TMC5130A_H
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-    
-    //  Section: Included Files
     #include "main.h"
     
 
 
     // PORTs to be defined
-    
     #define TMC5130A_CS_X LATGbits.LATG7                     
     #define TMC5130A_CS_Y LATGbits.LATG8                    
     #define TMC5130A_CS_Z LATGbits.LATG9                  
@@ -20,16 +14,13 @@ extern "C" {
     #define TMC5130A_EN_Y LATBbits.LATB4   
     #define TMC5130A_EN_Z LATBbits.LATB7  
 
-
-
-    
-
-    #define CLK_DRV  LATEbits.LATE5                // same for all
+    #define CLK_DRV  LATEbits.LATE5                
 
 
 
-    // Others :
-    #define	uSTEP_COURSE_PP 268000//268000
+    // TMC5130 Reg config
+
+    #define	uSTEP_COURSE_PP 268000
     #define	uSTEP_COURSE_X 426667
     #define	uSTEP_COURSE_X_ALL 65000000
     #define	uSTEP_SMALL_COURSE_X 50000
@@ -39,27 +30,16 @@ extern "C" {
 
     
     #define	uSTEP_COURSE_Z_1 400000
-    #define	uSTEP_COURSE_Z_2 250000  // PDISTRI
+    #define	uSTEP_COURSE_Z_2 250000  
     #define	uSTEP_COURSE_Z_ALL 650000
     #define	uSTEP_COURSE_Z_init_up   100000
     
     #define uSTEP_COURSE_Y 0x2E6B4  
     #define uSTEP_SMALL_COURSE_Y 0x4522  
 
-
     #define AMAX_EARLYRAMP 12000
 
-    #define STEPPER_X 0
-    #define STEPPER_Y 1
-    #define STEPPER_Z 2
-
-    // TRINAMIC TMC5130 Logics val Defines
-
-    #define X_DROITE 0
-    #define X_GAUCHE 1
-    
-    #define Z_HAUT 0
-    #define Z_BAS 1
+    // TMC5130 Logics val Defines
 
     #define NOT_USED 0
     #define POS_MODE 0
@@ -70,7 +50,10 @@ extern "C" {
     #define TMC5130A_READ 0
     #define TMC5130A_WRITE 1 
 
-    // TRINAMIC TMC5130 Register Address Defines
+    #define TMC5130A_MASK_POS_REACHED 0b01000000000
+    #define TMC5130A_MASK_VEL_ZERO  0b010000000000
+
+    // TMC5130 Register Address Defines
 
     #define TMC5130A_REG_ADDR_GCONF                 0x00 	// Global configuration flags
     #define TMC5130A_REG_ADDR_GSTA                  0x01    // Global status flag
@@ -106,8 +89,7 @@ extern "C" {
     #define TMC5130A_REG_ADDR_PWM_CONF              0x70
     #define TMC5130A_REG_ADDR_LOST_STEPS            0x73
 
-    #define TMC5130A_MASK_POS_REACHED 0b01000000000
-    #define TMC5130A_MASK_VEL_ZERO  0b010000000000
+
 
 
 typedef struct {
@@ -148,9 +130,5 @@ bool TMC5130A_Is_Motor_Velocity_Zero(uint8_t WichStepper);
 bool TMC5130A_Is_Motor_Position_Reached(uint8_t WichStepper);
 
 uint32_t BytesToUint32(uint8_t* data);
-    
-#ifdef	__cplusplus
-}
-#endif
 
 #endif

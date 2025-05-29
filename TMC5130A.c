@@ -226,7 +226,7 @@ void TMC5130A_Config_Ramp(StepperDriver* driver, uint32_t Vtarget, uint32_t Vsta
  */
 void TMC5130A_Config_uStep_Pos_Direction(StepperDriver* driver, int32_t microstep_number, uint8_t rot_dir, int32_t offset)
 {
-    int time = 100;
+    int timeout_ms = 100;
     int32_t pos = microstep_number;
 		
     TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_X_TARGET, pos);
@@ -323,13 +323,13 @@ bool TMC5130A_Is_Motor_Position_Reached(StepperDriver* driver)
 uint32_t TMC5130A_Read_RAMP_STAT(StepperDriver* driver)
 {
     uint8_t status_reg = 0;
-    uint8_t DataToWrite[4] = {0};
+    uint8_t DataToWrite[4] = {0};   
     uint8_t DataReaded[4] = {0};
     uint32_t read_reg = 0;
     
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_READ, TMC5130A_REG_ADDR_RAMP_STAT, &DataToWrite[0], &DataReaded[0]);
     
-    read_reg =  BytesToUint32(&DataReade[0]]);
+    read_reg =  BytesToUint32(&DataReaded[0]]);
     
     return(read_reg);
 }
@@ -350,7 +350,7 @@ int32_t TMC5130A_Read_X_ACTUAL(StepperDriver* driver)
 
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
 
-    read_reg =  BytesToUint32(&DataReade[0]]);
+    read_reg =  BytesToUint32(&DataReaded[0]]);
     
     return(read_reg);
 }
@@ -374,7 +374,7 @@ uint32_t TMC5130A_Clear_X_ACTUAL(StepperDriver* driver)
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
 
-    read_reg =  BytesToUint32(&DataReade[0]]);
+    read_reg =  BytesToUint32(&DataReaded[0]]);
     
     if ( (read_reg <= 50) || (read_reg >= -50) ) return 0;
     else return ERROR_DRIVER_MOTOR;   

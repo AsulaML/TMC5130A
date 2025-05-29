@@ -2,10 +2,10 @@
 #include "Spi2.h"
 
 
-// TMC5130A basic application block diagram with motion controller
-// SDMODE � la masse
-// SPIMODE NC 
-// SWSEL NC 
+// Config HW :
+// SDMODE   GND
+// SPIMODE  NC 
+// SWSEL    NC 
 
 
 
@@ -30,9 +30,18 @@ void Enable_Z(void)       { TMC5130A_EN_Z = 0; }
 void Disable_Z(void)      { TMC5130A_EN_Z = 1; }
 
 
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-// return the status value
-// RW 1 for write and 0 for read
+/**
+ * \fn TMC5130A_Read_Write_Reg
+ * \brief Fonction de communication du TMC5130A.
+ *
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \param    uint8_t RW : 1 pour écrire, 0 pour lire
+ * \param    uint8_t reg_adr : Adresse du registre
+ * \param    uint8_t pTransmitData : Données à écrire
+ * \param    uint8_t pReceiveData : Données à lire
+
+ * \return   uint8_t : status_reg
+ */
 uint8_t TMC5130A_Read_Write_Reg(StepperDriver* driver, uint8_t RW, uint8_t reg_adr, uint8_t *pTransmitData, uint8_t *pReceiveData)
 {
     uint8_t first_byte = (RW << 7) | (reg_adr & 0x7F);
@@ -54,7 +63,6 @@ uint8_t TMC5130A_Read_Write_Reg(StepperDriver* driver, uint8_t RW, uint8_t reg_a
     
     if (RW == TMC5130A_READ) 
     {
-        
         driver->CS_Select();
 
         // first transaction containt the addr and RW bit
@@ -66,22 +74,26 @@ uint8_t TMC5130A_Read_Write_Reg(StepperDriver* driver, uint8_t RW, uint8_t reg_a
         }
 
         driver->CS_Deselect();
-        
     }    
     
     return(status_reg);
 }
 
 
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-// mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
+/**
+ * \fn TMC5130A_Init
+ * \brief Fonction de communication du TMC5130A.
+ *
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \param    uint8_t mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
+
+ * \return   void
+ */
 void TMC5130A_Init(StepperDriver* driver, uint8_t mode)
 {
     uint8_t status_reg = 0;
     uint8_t DataReaded[4] = {0};
     
-		
-		
     // Driver EN X CONFIG
     TRISGbits.TRISG14 = 0;
     
@@ -93,54 +105,45 @@ void TMC5130A_Init(StepperDriver* driver, uint8_t mode)
     TRISBbits.TRISB7 = 0;
     ANSELBbits.ANSB7 = 0;
 		
-		
-		
     // CLK DRIVER TIED low for internal operation
     TRISEbits.TRISE5 = 0;
     ANSELEbits.ANSE5 = 0;
+
     CLK_DRV = 0;
     
     
     driver->Disable();
-
-
-    // mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
-    uint32_t data = mode & 0x03;  // Seuls les 2 bits de poids faible sont utilisés
-    uint8_t DataToWrite[4] = {
-        (data >> 24) & 0xFF,
-        (data >> 16) & 0xFF,
-        (data >> 8) & 0xFF,
-        data & 0xFF
-    };
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    TMC5130A_Config_Ramp_Mode(driver, mode);
 }
 
 
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-// mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
+
+/**
+ * \fn TMC5130A_Config_Ramp_Mode
+ * \brief Fonction de config du mode du TMC5130A.
+ *
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \param    uint8_t mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
+
+ * \return   void
+ */
 void TMC5130A_Config_Ramp_Mode(StepperDriver* driver, uint8_t mode)
 {
-    uint8_t DataReaded[4] = {0};
-    uint8_t status_reg = 0;
+    uint32_t data = mode & 0x03;  
 
-    // mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
-    uint32_t data = mode & 0x03;  // Seuls les 2 bits de poids faible sont utilisés
-    uint8_t DataToWrite[4] = {
-        (data >> 24) & 0xFF,
-        (data >> 16) & 0xFF,
-        (data >> 8) & 0xFF,
-        data & 0xFF
-    };
-
-    status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_RAMPMODE, &DataToWrite[0], &DataReaded[0]);
+    TMC5130A_Write_32b_Reg(driver, TMC5130A_REG_ADDR_RAMPMODE, data);
 }
 
-
-// WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
-// mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
-// irun :  0 � 31 
-// ihold : 0 � 31 
+/**
+ * \fn TMC5130A_Config_Ramp_Mode
+ * \brief Fonction de config du mode du TMC5130A.
+ *
+ * \param    StepperDriver* driver : Pointeur sur le driver
+ * \param    uint8_t mode : ramp mode 3 -> Hold 2-> Velocity negative 1-> Velocity positive 0-> positionning mode (A,D,V params)
+ * \param    uint8_t irun : 0 � 31 
+ * \param    uint8_t ihold : 0 � 31 
+ * \return   void
+ */
 void TMC5130A_Config_Courants(StepperDriver* driver, uint8_t  irun, uint8_t  ihold, uint8_t mode)
 {
     // GCONF : Push-pull (bit 13), PDN disable (bit 2)
@@ -248,6 +251,8 @@ void TMC5130A_Config_uStep_Pos_Direction(StepperDriver* driver, int32_t microste
 
 
 // WichStepper : 0 -> X ; 1-> Y ; 2 -> Z
+// VSTART = 0
+// VMAX = 0 
 // For a stop in positioning mode, set VSTART=0 and VMAX=0. VSTOP is not used in this case. The
 // driver will use AMAX and A1 (as determined by V1) for going to zero velocity.
 void TMC5130A_EarlyRampTermination_InPosMode(StepperDriver* driver)
@@ -256,13 +261,6 @@ void TMC5130A_EarlyRampTermination_InPosMode(StepperDriver* driver)
     uint8_t DataToWrite[4] = {0};
     uint8_t DataReaded[4] = {0};
     
-    // VSTART = 0
-    // VMAX = 0 
-    DataToWrite[0] = 0;   // 31..24
-    DataToWrite[1] = 0;   // 23..16
-    DataToWrite[2] = 0;   // 15.. 8
-    DataToWrite[3] = 0;   //  7.. 0
-
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_VSTART, &DataToWrite[0], &DataReaded[0]);
 
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_WRITE, TMC5130A_REG_ADDR_V_MAX, &DataToWrite[0], &DataReaded[0]);
@@ -321,12 +319,6 @@ uint32_t TMC5130A_Read_RAMP_STAT(StepperDriver* driver)
     uint8_t DataReaded[4] = {0};
     uint32_t read_reg = 0;
     
-
-    DataToWrite[0] = 0x00;                                          // 31..24
-    DataToWrite[1] = 0x00;                                          // 23..16
-    DataToWrite[2] = 0x00;                                          // 15.. 8
-    DataToWrite[3] = 0x00;                                          //  7.. 0
-
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_READ, TMC5130A_REG_ADDR_RAMP_STAT, &DataToWrite[0], &DataReaded[0]);
     
     read_reg =  BytesToUint32(&DataReade[0]]);
@@ -343,12 +335,6 @@ int32_t TMC5130A_Read_X_ACTUAL(StepperDriver* driver)
     uint8_t DataToWrite[4] = {0};
     uint8_t DataReaded[4] = {0};
     uint32_t read_reg = 0;
-    
-
-    DataToWrite[0] = 0x00;                                          // 31..24
-    DataToWrite[1] = 0x00;                                          // 23..16
-    DataToWrite[2] = 0x00;                                          // 15.. 8
-    DataToWrite[3] = 0x00;                                          //  7.. 0
 
     status_reg = TMC5130A_Read_Write_Reg(driver, TMC5130A_READ, TMC5130A_REG_ADDR_X_ACTUAL, &DataToWrite[0], &DataReaded[0]);
 
